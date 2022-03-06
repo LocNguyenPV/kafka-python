@@ -13,7 +13,7 @@ from kafka import KafkaProducer
 # SASL_USERNAME=os.getenv("KAFKA_SASL_USERNAME")
 # SASL_PASSWORD=os.getenv("KAFKA_SASL_PASSWORD")
 
-BOOTSTRAP_SERVERS="b-3-public.iot-project.dztnn7.c3.kafka.ap-southeast-1.amazonaws.com:9196,b-1-public.iot-project.dztnn7.c3.kafka.ap-southeast-1.amazonaws.com:9196,b-2-public.iot-project.dztnn7.c3.kafka.ap-southeast-1.amazonaws.com:9196".split(",")
+BOOTSTRAP_SERVERS="ec2-54-151-189-20.ap-southeast-1.compute.amazonaws.com:9092"
 TOPIC_NAME="MSKTutorialTopic"
 SASL_USERNAME="iotproject"
 SASL_PASSWORD="iotproject"
@@ -23,13 +23,13 @@ def serializer(message):
 
 
 # Kafka Producer
-# producer = KafkaProducer(
-#     bootstrap_servers=['localhost:9092'],
-#     value_serializer=serializer,
-#     compression_type='gzip'
-# )
+producer = KafkaProducer(
+    bootstrap_servers=['ec2-54-151-189-20.ap-southeast-1.compute.amazonaws.com:9092'],
+    value_serializer=serializer,
+    compression_type='gzip'
+)
 
-producer = KafkaProducer(value_serializer=serializer, security_protocol="SASL_SSL",  sasl_mechanism="SCRAM-SHA-512", sasl_plain_username=SASL_USERNAME, sasl_plain_password=SASL_PASSWORD, bootstrap_servers=BOOTSTRAP_SERVERS)
+# producer = KafkaProducer(value_serializer=serializer, security_protocol="SASL_SSL",  sasl_mechanism="SCRAM-SHA-512", sasl_plain_username=SASL_USERNAME, sasl_plain_password=SASL_PASSWORD, bootstrap_servers=BOOTSTRAP_SERVERS)
 
 
 
@@ -41,6 +41,6 @@ if __name__ == '__main__':
         
         # Send it to our 'messages' topic
         print(f'Producing message @ {datetime.now()} | Message = {str(dummy_message)}')
-        test = producer.send(TOPIC_NAME, dummy_message)
+        test = producer.send('test', dummy_message)
         print(test)
         time.sleep(10)
